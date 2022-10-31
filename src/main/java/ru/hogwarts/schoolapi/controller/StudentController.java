@@ -1,0 +1,53 @@
+package ru.hogwarts.schoolapi.controller;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import ru.hogwarts.schoolapi.model.Student;
+import ru.hogwarts.schoolapi.service.StudentService;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("student")
+public class StudentController {
+
+    private final StudentService studentService;
+
+    public StudentController(StudentService studentService) {
+        this.studentService = studentService;
+    }
+
+    @GetMapping("{id}")
+    public ResponseEntity<Student> getStudent(@PathVariable Long id) {
+        Student student = studentService.findStudent(id);
+        if (student == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        return ResponseEntity.ok(student);
+    }
+
+    @GetMapping("/students-by-age/{age}")
+    public List<Student> findStudentByAge(@PathVariable int age) {
+        return studentService.getStudentByAge(age);
+    }
+
+    @PostMapping
+    public Student createStudent(Student student) {
+        return studentService.createStudent(student);
+    }
+
+    @PutMapping
+    public ResponseEntity<Student> editStudent(@RequestBody Student studentToEdit) {
+        Student student = studentService.editStudent(studentToEdit);
+        if (student == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+        return ResponseEntity.ok(student);
+    }
+
+    @DeleteMapping("{id}")
+    public Student deleteStudent(@PathVariable Long id) {
+        return studentService.deleteStudent(id);
+    }
+}
