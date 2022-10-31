@@ -32,6 +32,11 @@ public class StudentController {
         return studentService.getStudentByAge(age);
     }
 
+    @GetMapping("/all")
+    public List<Student> getAllStudents() {
+        return studentService.getAllStudent();
+    }
+
     @PostMapping
     public Student createStudent(Student student) {
         return studentService.createStudent(student);
@@ -47,7 +52,8 @@ public class StudentController {
     }
 
     @DeleteMapping("{id}")
-    public Student deleteStudent(@PathVariable Long id) {
-        return studentService.deleteStudent(id);
+    public ResponseEntity<Student> deleteStudent(@PathVariable Long id) {
+        studentService.deleteStudent(id);
+        return ResponseEntity.ok().build();
     }
 }
