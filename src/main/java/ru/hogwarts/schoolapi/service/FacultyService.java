@@ -6,7 +6,6 @@ import ru.hogwarts.schoolapi.repository.FacultyRepository;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class FacultyService {
@@ -22,7 +21,7 @@ public class FacultyService {
     }
 
     public Faculty findFaculty(Long id) {
-        return facultyRepository.findById(id).orElse(null);
+        return facultyRepository.findById(id).get();
     }
 
     public Faculty editFaculty(Faculty faculty) {
@@ -34,9 +33,7 @@ public class FacultyService {
     }
 
     public List<Faculty> getFacultyByColor(String color) {
-        return facultyRepository.findAll().stream()
-                .filter(faculty -> faculty.getColor().equals(color))
-                .collect(Collectors.toList());
+        return facultyRepository.getFacultyByColor(color);
     }
 
     public List<Faculty> getAllFaculties() {

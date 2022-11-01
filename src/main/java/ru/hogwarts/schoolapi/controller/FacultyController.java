@@ -27,23 +27,23 @@ public class FacultyController {
         return ResponseEntity.ok(faculty);
     }
 
-    @GetMapping("/faculty-by-color/{color}")
-    public List<Faculty> findFacultyByColor(@PathVariable String color) {
+    @GetMapping("/faculty-by-color")
+    public List<Faculty> findFacultyByColor(@RequestBody String color) {
         return facultyService.getFacultyByColor(color);
     }
 
-    @GetMapping("/all")
-    public List<Faculty> getAllStudents() {
+    @GetMapping
+    public List<Faculty> getAllFaculty() {
         return facultyService.getAllFaculties();
     }
 
     @PostMapping
-    public Faculty createStudent(Faculty faculty) {
+    public Faculty createFaculty(@RequestBody Faculty faculty) {
         return facultyService.createFaculty(faculty);
     }
 
-    @PutMapping
-    public ResponseEntity<Faculty> editStudent(@RequestBody Faculty facultyToEdit) {
+    @PutMapping("{id}")
+    public ResponseEntity<Faculty> editFaculty(@RequestBody Faculty facultyToEdit) {
         Faculty faculty = facultyService.editFaculty(facultyToEdit);
         if (faculty == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
@@ -52,7 +52,7 @@ public class FacultyController {
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<Faculty> deleteStudent(@PathVariable Long id) {
+    public ResponseEntity<Faculty> deleteFaculty(@PathVariable Long id) {
         facultyService.deleteFaculty(id);
         return ResponseEntity.ok().build();
     }

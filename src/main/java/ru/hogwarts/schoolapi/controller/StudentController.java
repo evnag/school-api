@@ -27,18 +27,18 @@ public class StudentController {
         return ResponseEntity.ok(student);
     }
 
-    @GetMapping("/students-by-age/{age}")
-    public List<Student> findStudentByAge(@PathVariable int age) {
+    @GetMapping("/students-by-age")
+    public List<Student> findStudentByAge(@RequestBody int age) {
         return studentService.getStudentByAge(age);
     }
 
-    @GetMapping("/all")
+    @GetMapping
     public List<Student> getAllStudents() {
         return studentService.getAllStudent();
     }
 
     @PostMapping
-    public Student createStudent(Student student) {
+    public Student createStudent(@RequestBody Student student) {
         return studentService.createStudent(student);
     }
 
