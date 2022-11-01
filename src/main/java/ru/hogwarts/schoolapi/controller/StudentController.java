@@ -46,7 +46,7 @@ public class StudentController {
     public ResponseEntity<Student> editStudent(@RequestBody Student studentToEdit) {
         Student student = studentService.editStudent(studentToEdit);
         if (student == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
         return ResponseEntity.ok(student);
     }

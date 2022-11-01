@@ -46,7 +46,7 @@ public class FacultyController {
     public ResponseEntity<Faculty> editFaculty(@RequestBody Faculty facultyToEdit) {
         Faculty faculty = facultyService.editFaculty(facultyToEdit);
         if (faculty == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
         return ResponseEntity.ok(faculty);
     }
