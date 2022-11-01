@@ -42,7 +42,7 @@ public class FacultyController {
         return facultyService.createFaculty(faculty);
     }
 
-    @PutMapping("{id}")
+    @PutMapping
     public ResponseEntity<Faculty> editFaculty(@RequestBody Faculty facultyToEdit) {
         Faculty faculty = facultyService.editFaculty(facultyToEdit);
         if (faculty == null) {
