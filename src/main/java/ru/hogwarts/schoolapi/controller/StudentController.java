@@ -1,15 +1,14 @@
 package ru.hogwarts.schoolapi.controller;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.hogwarts.schoolapi.model.Student;
+import ru.hogwarts.schoolapi.record.StudentRecord;
 import ru.hogwarts.schoolapi.service.StudentService;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("student")
+@RequestMapping("/student")
 public class StudentController {
 
     private final StudentService studentService;
@@ -18,42 +17,34 @@ public class StudentController {
         this.studentService = studentService;
     }
 
-    @GetMapping("{id}")
-    public ResponseEntity<Student> getStudent(@PathVariable Long id) {
-        Student student = studentService.findStudent(id);
-        if (student == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-        return ResponseEntity.ok(student);
+    @GetMapping("/{id}")
+    public StudentRecord getStudent(@PathVariable long id) {
+        return studentService.findStudent(id);
     }
 
-    @GetMapping("/students-by-age")
-    public List<Student> findStudentByAge(@RequestBody int age) {
+    @GetMapping("/student-by-age")
+    public List<StudentRecord> findStudentByAge(@RequestParam int age) {
         return studentService.getStudentByAge(age);
     }
 
     @GetMapping
-    public List<Student> getAllStudents() {
+    public List<StudentRecord> getAllStudents() {
         return studentService.getAllStudent();
     }
 
     @PostMapping
-    public Student createStudent(@RequestBody Student student) {
-        return studentService.createStudent(student);
+    public StudentRecord createStudent(@RequestBody @Valid StudentRecord studentRecord) {
+        return studentService.createStudent(studentRecord);
     }
 
-    @PutMapping
-    public ResponseEntity<Student> editStudent(@RequestBody Student studentToEdit) {
-        Student student = studentService.editStudent(studentToEdit);
-        if (student == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-        return ResponseEntity.ok(student);
+    @PutMapping("/{id}")
+    public StudentRecord editStudent(@PathVariable long id,
+                                     @RequestBody StudentRecord studentRecord) {
+        return studentService.editStudent(id, studentRecord);
     }
 
-    @DeleteMapping("{id}")
-    public ResponseEntity<Student> deleteStudent(@PathVariable Long id) {
-        studentService.deleteStudent(id);
-        return ResponseEntity.ok().build();
+    @DeleteMapping("/{id}")
+    public StudentRecord deleteStudent(@PathVariable long id) {
+        return studentService.deleteStudent(id);
     }
 }
