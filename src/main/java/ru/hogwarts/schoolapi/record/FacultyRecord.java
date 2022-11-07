@@ -12,7 +12,6 @@ public class FacultyRecord {
     @NotBlank(message = "Цвет факультета должен быть заполнен!")
     private String color;
 
-
     public Long getId() {
         return id;
     }

@@ -5,6 +5,7 @@ import ru.hogwarts.schoolapi.component.RecordMapper;
 import ru.hogwarts.schoolapi.exception.FacultyNotFoundException;
 import ru.hogwarts.schoolapi.model.Faculty;
 import ru.hogwarts.schoolapi.record.FacultyRecord;
+import ru.hogwarts.schoolapi.record.StudentRecord;
 import ru.hogwarts.schoolapi.repository.FacultyRepository;
 
 import java.util.List;
@@ -37,7 +38,7 @@ public class FacultyService {
         return recordMapper.toRecord(facultyRepository.save(oldFaculty));
     }
 
-    public FacultyRecord deleteFaculty(Long id) {
+    public FacultyRecord deleteFaculty(long id) {
         Faculty faculty = facultyRepository.findById(id).orElseThrow(() -> new FacultyNotFoundException(id));
         facultyRepository.delete(faculty);
         return recordMapper.toRecord(faculty);
@@ -51,6 +52,18 @@ public class FacultyService {
 
     public List<FacultyRecord> getAllFaculties() {
         return facultyRepository.findAll().stream()
-                .map(recordMapper::toRecord).collect(Collectors.toList());
+                .map(recordMapper::toRecord)
+                .collect(Collectors.toList());
+    }
+
+    public FacultyRecord getFacultyByNameContainsIgnoreCaseOrColorContainsIgnoreCase(String name, String color) {
+        return recordMapper.toRecord(facultyRepository.getFacultyByNameContainsIgnoreCaseOrColorContainsIgnoreCase(name, color));
+    }
+
+    public List<StudentRecord> getStudentsByFacultyId(long id) {
+        Faculty faculty = facultyRepository.findById(id).orElseThrow(() -> new FacultyNotFoundException(id));
+        return faculty.getStudents().stream()
+                .map(recordMapper::toRecord)
+                .collect(Collectors.toList());
     }
 }
