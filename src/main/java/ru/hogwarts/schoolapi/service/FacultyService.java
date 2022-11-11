@@ -56,8 +56,8 @@ public class FacultyService {
                 .collect(Collectors.toList());
     }
 
-    public FacultyRecord getFacultyByNameContainsIgnoreCaseOrColorContainsIgnoreCase(String name, String color) {
-        return recordMapper.toRecord(facultyRepository.getFacultyByNameContainsIgnoreCaseOrColorContainsIgnoreCase(name, color));
+    public FacultyRecord getFacultyByNameContainsIgnoreCaseOrColorContainsIgnoreCase(String nameOrColor) {
+        return recordMapper.toRecord(facultyRepository.getFacultyByNameContainsIgnoreCaseOrColorContainsIgnoreCase(nameOrColor, nameOrColor));
     }
 
     public List<StudentRecord> getStudentsByFacultyId(long id) {

@@ -23,9 +23,14 @@ public class FacultyController {
         return facultyService.findFaculty(id);
     }
 
-    @GetMapping("/faculty-by-color")
+    @GetMapping(value = "/faculty-by-color", params = "!colorOrName")
     public List<FacultyRecord> findFacultyByColor(@RequestParam String color) {
         return facultyService.getFacultyByColor(color);
+    }
+
+    @GetMapping(value = "/by-name-or-color", params = "colorOrName")
+    public FacultyRecord getFacultyByNameOrColor(@RequestParam String nameOrColor) {
+        return facultyService.getFacultyByNameContainsIgnoreCaseOrColorContainsIgnoreCase(nameOrColor);
     }
 
     @GetMapping
@@ -33,13 +38,7 @@ public class FacultyController {
         return facultyService.getAllFaculties();
     }
 
-    @GetMapping("/by-name-or-color")
-    public FacultyRecord getFacultyByNameContainsIgnoreCaseOrColorContainsIgnoreCase(@RequestParam String name,
-                                                                                     @RequestParam String color) {
-        return facultyService.getFacultyByNameContainsIgnoreCaseOrColorContainsIgnoreCase(name, color);
-    }
-
-    @GetMapping("/students-by-faculty/{id}")
+    @GetMapping("/{id}/students")
     public List<StudentRecord> getStudentsByFacultyId(@PathVariable long id) {
         return facultyService.getStudentsByFacultyId(id);
     }

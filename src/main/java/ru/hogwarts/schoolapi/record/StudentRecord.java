@@ -15,6 +15,8 @@ public class StudentRecord {
     @Max(value = 33, message = "Максимальный возраст студента 33 лет!")
     private int age;
 
+    private FacultyRecord faculty;
+
     public Long getId() {
         return id;
     }
@@ -39,4 +41,11 @@ public class StudentRecord {
         this.age = age;
     }
 
+    public FacultyRecord getFaculty() {
+        return faculty;
+    }
+
+    public void setFaculty(FacultyRecord faculty) {
+        this.faculty = faculty;
+    }
 }
