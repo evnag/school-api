@@ -14,7 +14,7 @@ public class Faculty {
     private String color;
 
     @OneToMany(mappedBy = "faculty")
-    private List<Student> students; //FIXME: Нужно ли добавлять в Record??
+    private List<Student> students;
 
     public Long getId() {
         return id;

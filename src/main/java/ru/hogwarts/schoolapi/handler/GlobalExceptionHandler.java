@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import ru.hogwarts.schoolapi.exception.AvatarNotFoundException;
 import ru.hogwarts.schoolapi.exception.FacultyNotFoundException;
 import ru.hogwarts.schoolapi.exception.StudentNotFoundException;
 
@@ -22,6 +23,11 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(FacultyNotFoundException.class)
     public ResponseEntity<String> handleFacultyNotFoundException(FacultyNotFoundException e) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Факультет с id = " + e.getId() + " не найден!");
+    }
+
+    @ExceptionHandler(AvatarNotFoundException.class)
+    public ResponseEntity<String> handleAvatarNotFoundException(AvatarNotFoundException e) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Аватар с id = " + e.getId() + " не найден!");
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

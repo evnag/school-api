@@ -14,7 +14,7 @@ public class Student {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "faculty_id")
-    private Faculty faculty; //FIXME: Нужно ли добавлять в Record??
+    private Faculty faculty;
 
     public Long getId() {
         return id;
