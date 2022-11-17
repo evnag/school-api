@@ -33,6 +33,21 @@ public class StudentController {
         return studentService.getAllStudent();
     }
 
+    @GetMapping("/amount")
+    public Integer countStudents() {
+        return studentService.countStudents();
+    }
+
+    @GetMapping("/average-age")
+    public Double getAverageAge() {
+        return studentService.getAverageAge();
+    }
+
+    @GetMapping("/max-id-limit")
+    public List<StudentRecord> findFiveStudentWithMaxId() {
+        return studentService.findFiveStudentWithMaxId();
+    }
+
     @GetMapping("/student-by-range")
     public List<StudentRecord> findByAgeBetween(@RequestParam int minAge,
                                                 @RequestParam int maxAge) {

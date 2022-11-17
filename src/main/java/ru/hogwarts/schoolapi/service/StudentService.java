@@ -74,6 +74,20 @@ public class StudentService {
                 .collect(Collectors.toList());
     }
 
+    public Integer countStudents() {
+        return studentRepository.countStudents();
+    }
+
+    public Double getAverageAge() {
+        return studentRepository.getAverageAge();
+    }
+
+    public List<StudentRecord> findFiveStudentWithMaxId() {
+        return studentRepository.findFiveStudentWithMaxId().stream()
+                .map(recordMapper::toRecord)
+                .collect(Collectors.toList());
+    }
+
     public List<StudentRecord> findByAgeBetween(int minAge, int maxAge) {
         return studentRepository.findByAgeBetween(minAge, maxAge).stream()
                 .map(recordMapper::toRecord)
