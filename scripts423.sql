@@ -1,7 +1,7 @@
-SELECT (student.name, age)
+SELECT (student.name, age, faculty.name)
 FROM student
-         LEFT JOIN faculty f ON student.faculty_id = f.id;
+JOIN faculty ON student.faculty_id = faculty.id;
 
-SELECT (student.name, age)
-FROM student
-         INNER JOIN avatar a on student.id = a.student_id;
+SELECT (avatar.file_path, student.name)
+FROM avatar
+JOIN student ON avatar.student_id = student.id;
