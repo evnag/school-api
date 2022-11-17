@@ -1,0 +1,18 @@
+CREATE TABLE car
+(
+    CarId SERIAL PRIMARY KEY,
+    Brand CHARACTER VARYING(30) NOT NULL,
+    Model CHARACTER VARYING(30) NOT NULL,
+    Price NUMERIC
+);
+
+CREATE TABLE person
+(
+    PersonId SERIAL PRIMARY KEY,
+    CarId    SERIAL REFERENCES car (CarId),
+    LastName CHARACTER VARYING(30) NOT NULL,
+    Age      INTEGER               NOT NULL,
+    License  BOOLEAN
+);
+
+
