@@ -1,5 +1,7 @@
 package ru.hogwarts.schoolapi.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -33,6 +35,8 @@ public class AvatarService {
     private final AvatarRepository avatarRepository;
     private final RecordMapper recordMapper;
 
+    Logger logger = LoggerFactory.getLogger(AvatarService.class);
+
     @Value("${avatar.dir.path}")
     private String avatarsDir;
 
@@ -45,7 +49,11 @@ public class AvatarService {
     }
 
     public AvatarRecord uploadAvatar(long studentId, MultipartFile avatarFile) throws IOException {
-        Student student = studentRepository.findById(studentId).orElseThrow(() -> new StudentNotFoundException(studentId));
+        logger.info("Was invoked method for upload avatar");
+        Student student = studentRepository.findById(studentId).orElseThrow(() -> {
+            logger.error("There is not student with id = " + studentId);
+            return new StudentNotFoundException(studentId);
+        });
         byte[] data = avatarFile.getBytes();
 
         String extension = Optional.ofNullable(avatarFile.getOriginalFilename()).map(fileName -> fileName.substring(avatarFile.getOriginalFilename().lastIndexOf('.')))
@@ -64,16 +72,25 @@ public class AvatarService {
     }
 
     public Pair<byte[], String> downloadAvatarFromFs(long id) throws IOException {
-        Avatar avatar = avatarRepository.findById(id).orElseThrow(() -> new AvatarNotFoundException(id));
+        logger.info("Was invoked method for download avatar from file system");
+        Avatar avatar = avatarRepository.findById(id).orElseThrow(() -> {
+            logger.error("There is not avatar with id = " + id);
+            return new AvatarNotFoundException(id);
+        });
         return Pair.of(Files.readAllBytes(Paths.get(avatar.getFilePath())), avatar.getMediaType());
     }
 
     public Pair<byte[], String> downloadAvatarFromDb(long id) throws IOException {
-        Avatar avatar = avatarRepository.findById(id).orElseThrow(() -> new AvatarNotFoundException(id));
+        logger.info("Was invoked method for download avatar from database");
+        Avatar avatar = avatarRepository.findById(id).orElseThrow(() -> {
+            logger.error("There is not avatar with id = " + id);
+            return new AvatarNotFoundException(id);
+        });
         return Pair.of(avatar.getData(), avatar.getMediaType());
     }
 
     public List<AvatarRecord> getAvatarsByPage(Integer pageNumber, Integer pageSize) {
+        logger.info("Was invoked method for get avatars by page");
         Pageable pageRequest = PageRequest.of(pageNumber - 1, pageSize);
         return avatarRepository.findAll(pageRequest).getContent().stream()
                 .map(recordMapper::toRecord)

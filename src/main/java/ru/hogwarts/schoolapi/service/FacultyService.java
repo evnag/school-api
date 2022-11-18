@@ -1,5 +1,7 @@
 package ru.hogwarts.schoolapi.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import ru.hogwarts.schoolapi.component.RecordMapper;
 import ru.hogwarts.schoolapi.exception.FacultyNotFoundException;
@@ -17,6 +19,9 @@ public class FacultyService {
     private final FacultyRepository facultyRepository;
     private final RecordMapper recordMapper;
 
+    Logger logger = LoggerFactory.getLogger(FacultyService.class);
+
+
     public FacultyService(FacultyRepository facultyRepository,
                           RecordMapper recordMapper) {
         this.facultyRepository = facultyRepository;
@@ -24,43 +29,60 @@ public class FacultyService {
     }
 
     public FacultyRecord createFaculty(FacultyRecord facultyRecord) {
+        logger.info("Was invoked method for create faculty");
         return recordMapper.toRecord(facultyRepository.save(recordMapper.toEntity(facultyRecord)));
     }
 
     public FacultyRecord findFaculty(long id) {
-        return recordMapper.toRecord(facultyRepository.findById(id).orElseThrow(() -> new FacultyNotFoundException(id)));
+        logger.info("Was invoked method for find faculty by id");
+        return recordMapper.toRecord(facultyRepository.findById(id).orElseThrow(() -> {
+            logger.error("There is not faculty with id = " + id);
+            return  new FacultyNotFoundException(id);
+        }));
     }
 
     public FacultyRecord editFaculty(long id, FacultyRecord facultyRecord) {
-        Faculty oldFaculty = facultyRepository.findById(id).orElseThrow(() -> new FacultyNotFoundException(id));
+        logger.info("Was invoked method for edit faculty");
+        Faculty oldFaculty = facultyRepository.findById(id).orElseThrow(() -> {
+            logger.error("There is not faculty with id = " + id);
+            return  new FacultyNotFoundException(id);
+        });
         oldFaculty.setName(facultyRecord.getName());
         oldFaculty.setColor(facultyRecord.getColor());
         return recordMapper.toRecord(facultyRepository.save(oldFaculty));
     }
 
     public FacultyRecord deleteFaculty(long id) {
-        Faculty faculty = facultyRepository.findById(id).orElseThrow(() -> new FacultyNotFoundException(id));
+        logger.info("Was invoked method for delete faculty");
+        Faculty faculty = facultyRepository.findById(id).orElseThrow(() -> {
+            logger.error("There is not faculty with id = " + id);
+            return  new FacultyNotFoundException(id);
+        });
         facultyRepository.delete(faculty);
         return recordMapper.toRecord(faculty);
     }
 
     public List<FacultyRecord> getFacultyByColor(String color) {
+        logger.info("Was invoked method for find faculty by color");
         return facultyRepository.getFacultyByColor(color).stream()
                 .map(recordMapper::toRecord)
                 .collect(Collectors.toList());
     }
 
     public List<FacultyRecord> getAllFaculties() {
+        logger.info("Was invoked method for get all faculties");
         return facultyRepository.findAll().stream()
                 .map(recordMapper::toRecord)
                 .collect(Collectors.toList());
     }
 
     public FacultyRecord getFacultyByNameContainsIgnoreCaseOrColorContainsIgnoreCase(String nameOrColor) {
+        logger.info("Was invoked method for find faculty by name or color");
         return recordMapper.toRecord(facultyRepository.getFacultyByNameContainsIgnoreCaseOrColorContainsIgnoreCase(nameOrColor, nameOrColor));
     }
 
     public List<StudentRecord> getStudentsByFacultyId(long id) {
+        logger.info("Was invoked method for get students by faculty id");
         Faculty faculty = facultyRepository.findById(id).orElseThrow(() -> new FacultyNotFoundException(id));
         return faculty.getStudents().stream()
                 .map(recordMapper::toRecord)

@@ -1,5 +1,7 @@
 package ru.hogwarts.schoolapi.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import ru.hogwarts.schoolapi.component.RecordMapper;
 import ru.hogwarts.schoolapi.exception.StudentNotFoundException;
@@ -21,6 +23,8 @@ public class StudentService {
     private final FacultyRepository facultyRepository;
     private final RecordMapper recordMapper;
 
+    Logger logger = LoggerFactory.getLogger(StudentService.class);
+
     public StudentService(StudentRepository studentRepository,
                           FacultyRepository facultyRepository,
                           RecordMapper recordMapper) {
@@ -30,6 +34,7 @@ public class StudentService {
     }
 
     public StudentRecord createStudent(StudentRecord studentRecord) {
+        logger.info("Was invoked method for create student");
         Student student = recordMapper.toEntity(studentRecord);
         Faculty faculty = Optional.ofNullable(studentRecord.getFaculty())
                 .map(FacultyRecord::getId)
@@ -40,11 +45,19 @@ public class StudentService {
     }
 
     public StudentRecord findStudent(long id) {
-        return recordMapper.toRecord(studentRepository.findById(id).orElseThrow(() -> new StudentNotFoundException(id)));
+        logger.info("Was invoked method for find student");
+        return recordMapper.toRecord(studentRepository.findById(id).orElseThrow(() -> {
+            logger.error("There is not student with id = " + id);
+            return new StudentNotFoundException(id);
+        }));
     }
 
     public StudentRecord editStudent(long id, StudentRecord studentRecord) {
-        Student oldStudent = studentRepository.findById(id).orElseThrow(() -> new StudentNotFoundException(id));
+        logger.info("Was invoked method for edit student");
+        Student oldStudent = studentRepository.findById(id).orElseThrow(() -> {
+            logger.error("There is not student with id = " + id);
+            return new StudentNotFoundException(id);
+        });
         oldStudent.setName(studentRecord.getName());
         oldStudent.setAge(studentRecord.getAge());
         oldStudent.setFaculty(
@@ -57,44 +70,55 @@ public class StudentService {
     }
 
     public StudentRecord deleteStudent(long id) {
-        Student student = studentRepository.findById(id).orElseThrow(() -> new StudentNotFoundException(id));
+        logger.info("Was invoked method for delete student");
+        Student student = studentRepository.findById(id).orElseThrow(() -> {
+            logger.error("There is not student with id = " + id);
+            return new StudentNotFoundException(id);
+        });
         studentRepository.delete(student);
         return recordMapper.toRecord(student);
     }
 
     public List<StudentRecord> getStudentByAge(int age) {
+        logger.info("Was invoked method for find students by age");
         return studentRepository.getStudentByAge(age).stream()
                 .map(recordMapper::toRecord)
                 .collect(Collectors.toList());
     }
 
     public List<StudentRecord> getAllStudent() {
+        logger.info("Was invoked method for get all students");
         return studentRepository.findAll().stream()
                 .map(recordMapper::toRecord)
                 .collect(Collectors.toList());
     }
 
     public Integer countStudents() {
+        logger.info("Was invoked method for count students");
         return studentRepository.countStudents();
     }
 
     public Double getAverageAge() {
+        logger.info("Was invoked method for get average age");
         return studentRepository.getAverageAge();
     }
 
     public List<StudentRecord> findFiveStudentWithMaxId() {
+        logger.info("Was invoked method for find 5 students with max id");
         return studentRepository.findFiveStudentWithMaxId().stream()
                 .map(recordMapper::toRecord)
                 .collect(Collectors.toList());
     }
 
     public List<StudentRecord> findByAgeBetween(int minAge, int maxAge) {
+        logger.info("Was invoked method for find students in range");
         return studentRepository.findByAgeBetween(minAge, maxAge).stream()
                 .map(recordMapper::toRecord)
                 .collect(Collectors.toList());
     }
 
     public FacultyRecord getFacultyByStudentId(long id) {
+        logger.info("Was invoked method for get faculty by student id");
         return findStudent(id).getFaculty();
     }
 }
