@@ -15,7 +15,7 @@ import ru.hogwarts.schoolapi.repository.StudentRepository;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
+import java.util.stream.LongStream;
 
 @Service
 public class StudentService {
@@ -139,10 +139,10 @@ public class StudentService {
         return findStudent(id).getFaculty();
     }
 
-    public int parallelSum() {
+    public long parallelSum() {
         logger.info("Was invoked method for get parallel sum");
         long time = System.currentTimeMillis();
-        int sum = IntStream.rangeClosed(1, 1_000_000).parallel().reduce(0, Integer::sum);
+        long sum = LongStream.rangeClosed(1, 1_000_000).parallel().reduce(0, Long::sum);
         logger.warn("The method was executed in: {} ms", (System.currentTimeMillis() - time));
         return sum;
     }

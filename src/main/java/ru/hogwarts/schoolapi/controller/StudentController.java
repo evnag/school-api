@@ -86,7 +86,7 @@ public class StudentController {
     }
 
     @GetMapping("/parallelSum")
-    public int parallelSum() {
+    public long parallelSum() {
         return studentService.parallelSum();
     }
 }
