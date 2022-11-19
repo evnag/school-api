@@ -28,6 +28,11 @@ public class StudentController {
         return studentService.getStudentByAge(age);
     }
 
+    @GetMapping("/name-starts-with-letter")
+    public List<StudentRecord> getNamesStartsWithLetter(@RequestParam String letter) {
+        return studentService.getNamesStartsWithLetter(letter);
+    }
+
     @GetMapping
     public List<StudentRecord> getAllStudents() {
         return studentService.getAllStudent();
@@ -41,6 +46,11 @@ public class StudentController {
     @GetMapping("/average-age")
     public Double getAverageAge() {
         return studentService.getAverageAge();
+    }
+
+    @GetMapping("/average-age-stream")
+    public Double getAverageAgeStream() {
+        return studentService.getAverageAgeStream();
     }
 
     @GetMapping("/max-id-limit")
@@ -73,5 +83,10 @@ public class StudentController {
     @DeleteMapping("/{id}")
     public StudentRecord deleteStudent(@PathVariable long id) {
         return studentService.deleteStudent(id);
+    }
+
+    @GetMapping("/parallelSum")
+    public long parallelSum() {
+        return studentService.parallelSum();
     }
 }

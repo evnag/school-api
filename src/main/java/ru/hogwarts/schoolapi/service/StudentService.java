@@ -15,6 +15,7 @@ import ru.hogwarts.schoolapi.repository.StudentRepository;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.LongStream;
 
 @Service
 public class StudentService {
@@ -86,6 +87,14 @@ public class StudentService {
                 .collect(Collectors.toList());
     }
 
+    public List<StudentRecord> getNamesStartsWithLetter(String letter) {
+        logger.info("Was invoked method for get names starts with the letter");
+        return studentRepository.findAll().stream()
+                .filter(student -> student.getName().startsWith(letter))
+                .map(recordMapper::toRecord)
+                .collect(Collectors.toList());
+    }
+
     public List<StudentRecord> getAllStudent() {
         logger.info("Was invoked method for get all students");
         return studentRepository.findAll().stream()
@@ -101,6 +110,14 @@ public class StudentService {
     public Double getAverageAge() {
         logger.info("Was invoked method for get average age");
         return studentRepository.getAverageAge();
+    }
+
+    public Double getAverageAgeStream() {
+        logger.info("Was invoked method for get average age");
+        return studentRepository.findAll().stream()
+                .mapToDouble(Student::getAge)
+                .average()
+                .orElse(Double.NaN);
     }
 
     public List<StudentRecord> findFiveStudentWithMaxId() {
@@ -120,5 +137,13 @@ public class StudentService {
     public FacultyRecord getFacultyByStudentId(long id) {
         logger.info("Was invoked method for get faculty by student id");
         return findStudent(id).getFaculty();
+    }
+
+    public long parallelSum() {
+        logger.info("Was invoked method for get parallel sum");
+        long time = System.currentTimeMillis();
+        long sum = LongStream.range(1, 1_000_000).parallel().reduce(0L, Long::sum);
+        logger.warn("The method was executed in: {} ms", (System.currentTimeMillis() - time));
+        return sum;
     }
 }

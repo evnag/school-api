@@ -10,7 +10,9 @@ import ru.hogwarts.schoolapi.record.FacultyRecord;
 import ru.hogwarts.schoolapi.record.StudentRecord;
 import ru.hogwarts.schoolapi.repository.FacultyRepository;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -39,6 +41,13 @@ public class FacultyService {
             logger.error("There is not faculty with id = " + id);
             return  new FacultyNotFoundException(id);
         }));
+    }
+
+    public FacultyRecord findFacultyWithLongestName() {
+        logger.info("Was invoked method for find faculty with longest name");
+        return recordMapper.toRecord(Objects.requireNonNull(facultyRepository.findAll().stream()
+                .max(Comparator.comparingInt(faculty -> faculty.getName().length()))
+                .orElse(null)));
     }
 
     public FacultyRecord editFaculty(long id, FacultyRecord facultyRecord) {

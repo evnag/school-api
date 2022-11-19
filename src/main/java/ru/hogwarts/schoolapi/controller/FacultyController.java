@@ -33,6 +33,11 @@ public class FacultyController {
         return facultyService.getFacultyByNameContainsIgnoreCaseOrColorContainsIgnoreCase(nameOrColor);
     }
 
+    @GetMapping("/longest-name")
+    public FacultyRecord findFacultyWithLongestName() {
+        return facultyService.findFacultyWithLongestName();
+    }
+
     @GetMapping
     public List<FacultyRecord> getAllFaculties() {
         return facultyService.getAllFaculties();
