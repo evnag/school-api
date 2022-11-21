@@ -164,7 +164,7 @@ public class FacultyControllerTest {
         facultyRecord.setName("Gryffindor");
 
         mockMvc.perform(MockMvcRequestBuilders.get("/faculty/by-name-or-color")
-                .param("colorOrName", faculty.getColor())
+                .param("color", faculty.getColor())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(facultyRecord)))
                 .andExpect(result -> {
@@ -197,8 +197,8 @@ public class FacultyControllerTest {
         List<FacultyRecord> facultyRecordList = new ArrayList<>();
         facultyRecordList.add(facultyRecord1);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/faculty/faculty-by-color/")
-                        .param("!colorOrName", faculty.getColor())
+        mockMvc.perform(MockMvcRequestBuilders.get("/faculty/faculty-by-color")
+                        .param("colorOrName", faculty.getColor())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(facultyRecordList)))
                 .andExpect(result -> {

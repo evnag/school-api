@@ -89,4 +89,14 @@ public class StudentController {
     public long parallelSum() {
         return studentService.parallelSum();
     }
+
+    @GetMapping("/getStudentsAsync")
+    public void printStudents() {
+        studentService.printStudents();
+    }
+
+    @GetMapping("/getStudentsSync")
+    public void printStudentsSync() {
+        studentService.printStudentsSync();
+    }
 }

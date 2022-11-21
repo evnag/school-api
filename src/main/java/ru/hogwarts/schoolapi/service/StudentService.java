@@ -2,6 +2,7 @@ package ru.hogwarts.schoolapi.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import ru.hogwarts.schoolapi.component.RecordMapper;
 import ru.hogwarts.schoolapi.exception.StudentNotFoundException;
@@ -142,8 +143,38 @@ public class StudentService {
     public long parallelSum() {
         logger.info("Was invoked method for get parallel sum");
         long time = System.currentTimeMillis();
-        long sum = LongStream.rangeClosed(1, 1_000_000).parallel().reduce(0, Long::sum);
+        long sum = LongStream.rangeClosed(1, 1_000_000).parallel().reduce(0L, Long::sum);
         logger.warn("The method was executed in: {} ms", (System.currentTimeMillis() - time));
         return sum;
+    }
+
+    public void printStudents() {
+        logger.info("Was invoked method for get students async");
+        List<Student> students = studentRepository.findAll(PageRequest.of(0, 6)).getContent();
+
+        printStudents(students.subList(0, 2));
+        new Thread(() -> printStudents(students.subList(2,4))).start();
+        new Thread(() -> printStudents(students.subList(4,6))).start();
+    }
+
+    private void printStudents(List<Student> students) {
+        for (Student student : students) {
+            logger.info(student.getName());
+        }
+    }
+
+    public void printStudentsSync() {
+        logger.info("Was invoked method for print students sync");
+        List<Student> students = studentRepository.findAll(PageRequest.of(0, 6)).getContent();
+
+        printStudentsSync(students.subList(0, 2));
+        new Thread(() -> printStudentsSync(students.subList(2,4))).start();
+        new Thread(() -> printStudentsSync(students.subList(4,6))).start();
+    }
+
+    private synchronized void printStudentsSync(List<Student> students) {
+        for (Student student : students) {
+            logger.info(student.getName());
+        }
     }
 }
