@@ -35,7 +35,7 @@ public class AvatarService {
     private final AvatarRepository avatarRepository;
     private final RecordMapper recordMapper;
 
-    Logger logger = LoggerFactory.getLogger(AvatarService.class);
+    private final Logger logger = LoggerFactory.getLogger(AvatarService.class);
 
     @Value("${avatar.dir.path}")
     private String avatarsDir;
